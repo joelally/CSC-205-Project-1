@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Program 3 </title>
+    <script type="text/javascript" src="prog3data.js"></script>
+
+    <style type="text/css">
+        #main_body {
+            font-family: arial, verdana, sans-serif;
+        }
+
+        p {
+            padding-bottom: 10px;
+        }
+    </style>
+
+</head>
+
+<body id="main_body">
+    
+        <p>
+            Filter: <input id="filter" type="text" name="filter">
+        </p>
+    
+
+    <table id = "table2">
+        <thead>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+        </thead>
+        <tbody id = "table">
+		<template id ="rowtemplate">
+            <tr id = "row">
+                <td id = "first"></td>
+                <td id = "last"></td>
+                <td id = "city"></td>
+                <td id = "state"></td>
+                <td id = "zip"></td>
+            </tr>
+		</template>
+        </tbody>
+    </table>
+
+    <script>
+
+
+    	/* HINTS:
+    		1. Filter original data into a display array and show the display array
+
+    		2. Crate a row template, clone the row, change the values and append cloned row to
+    			the table
+    	*/
+		
+		var etarget = "";
+		filter.addEventListener("input",(e) => etarget = e.target.value);
+		//filter.addEventListener("input", MyFunction());
+		function MyFunction(){
+		
+		let somePeople = people.filter(item =>item.firstname.includes(etarget)||item.lastname.includes(etarget)||item.city.includes(etarget)||item.state.includes(etarget));
+		console.log(somePeople);
+		console.log(document.getElementById("table"));
+
+		for(i = table2.rows.length -1; i > 0; i--){
+		table2.deleteRow(i);
+		}
+		
+		
+		var template = document.getElementById("rowtemplate");
+		for(i = 0; i < somePeople.length; i++)
+		{
+		var table = document.getElementById("table");
+		var clone = document.importNode(template.content, true);
+		var td = clone.querySelectorAll("td");
+		td[0].textContent = somePeople[i].firstname;
+		td[1].textContent = somePeople[i].lastname;
+		td[2].textContent = somePeople[i].city;
+		td[3].textContent = somePeople[i].state;
+		td[4].textContent = somePeople[i].zipcode;	
+		table.appendChild(clone);
+		}
+		
+		
+		}
+		
+		filter.oninput = function(){
+	MyFunction();
+}
+		
+		MyFunction();
+
+
+    </script>
+</body>
+
+</html>
