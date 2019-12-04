@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>Program 4</title>
+   
+
+    <style type="text/css">
+        #main_body {
+            font-family: arial, verdana, sans-serif;
+        }
+
+        p {
+            padding-bottom: 10px;
+        }
+		
+		.odd{background-color: gray;}
+		.even{background-color: white;}
+		
+    </style>
+
+</head>
+
+<body id="main_body">
+    
+        <p>
+            Filter: <input id="filter" type="text" name="filter">
+        </p>
+    
+
+    <table id = "table2">
+        <thead>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Zip</th>
+        </thead>
+        <tbody id = "table">
+		<template id ="rowtemplate">
+            <tr class = "row">
+                <td class = "first"></td>
+                <td class = "last"></td>
+                <td class = "city"></td>
+                <td class = "state"></td>
+                <td class= "zip"></td>
+            </tr>
+		</template>
+        </tbody>
+    </table>
+
+    <script>
+
+
+
+		var people = [];//creates the people array outside of anything before information is added to it
+		(async () => {
+		let response = await fetch('https://scottmadeira.com/api/tabledata');
+		people = await response.json();
+		MyFunction();//this displays the info after it loads the data from the api		
+		})()
+
+		
+		
+		
+		
+		//this is mostly unchanged program 3, except now it isn't case sensitive
+		var etarget = "";
+		var table = document.getElementById("table");
+		filter.addEventListener("input",(e) => etarget = e.target.value.toLowerCase());
+		
+		function MyFunction(){
+		
+		let somePeople = people.filter(item =>item.firstname.toLowerCase().includes(etarget)||item.lastname.toLowerCase().includes(etarget)||item.city.toLowerCase().includes(etarget)||item.state.toLowerCase().includes(etarget)||item.zipcode.toString().includes(etarget));
+		console.log(somePeople);
+		console.log(document.getElementById("table"));
+
+		for(i = table2.rows.length -1; i > 0; i--){
+		table2.deleteRow(i);
+		}
+		
+		
+		var template = document.getElementById("rowtemplate");
+		for(i = 0; i < somePeople.length; i++)
+		{
+	
+		var clone = document.importNode(template.content, true);
+		var td = clone.querySelectorAll("td");
+		td[0].textContent = somePeople[i].firstname;
+		td[1].textContent = somePeople[i].lastname;
+		td[2].textContent = somePeople[i].city;
+		td[3].textContent = somePeople[i].state;
+		td[4].textContent = somePeople[i].zipcode;
+
+		table.appendChild(clone);
+		}
+	  
+     //this is the section that changes the colors of the table
+		var rows = table.getElementsByTagName("tr");   
+		for(i = 0; i < rows.length; i++){//this goes through every row and uses the modulus to determine if the 'i' is odd or even           
+			if(i % 2 == 0){ 
+				rows[i].className = "even"; 
+			}
+			else{ 
+				rows[i].className = "odd"; 
+			}       
+    } 
+  
+		
+		}
+		
+		filter.oninput = function(){
+	MyFunction();
+}
+		
+		
+
+
+    </script>
+</body>
+
+</html>
